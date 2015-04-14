@@ -227,6 +227,12 @@ def GetMove(StartSquare, FinishSquare):
   return StartSquare, FinishSquare
 
 def MakeMove(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseTurn):
+  vacant=Board[FinishRank][FinishFile][1]
+  if vacant != "":
+    Colour1, Type1 = GetPieceName(StartRank, StartFile)
+    Colour2,Type2=GetPieceName(FinishRank, FinishFile)
+    print("{0} {1} takes {2} {3}".format(Colour1, Type1,Colour2,Type2))
+
   if WhoseTurn == "W" and FinishRank == 1 and Board[StartRank][StartFile][1] == "R":
     Board[FinishRank][FinishFile] = "WM"
     Board[StartRank][StartFile] = "  "
@@ -237,6 +243,7 @@ def MakeMove(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseTurn):
     Board[StartRank][StartFile] = "  "
     print()
     print("Black Redum has been promoted to Marzaz Pani")
+  
     
   else:
     Board[FinishRank][FinishFile] = Board[StartRank][StartFile]
@@ -255,10 +262,10 @@ def ConfirmMove(StartSquare, FinishSquare):
   return confirm
 
       
-def GetPieceName(StartRank, StartFile, FinishRank, FinishFile):
+def GetPieceName(StartRank, StartFile):
   PieceColour = Board[StartRank][StartFile][0]
   PieceType = Board[StartRank][StartFile][1]
-  ##vacant=Board[FinishRank][FinishFile][1]
+  
 
   pieces = ["R","S","M","G","N","E"]
   pieces_full=["Reddum","Sarrum","Marzaz Pani","Gisgirgir","Nabu","Etlu"]
@@ -273,25 +280,6 @@ def GetPieceName(StartRank, StartFile, FinishRank, FinishFile):
   else:
     PieceColour = "Black"
   return PieceColour,PieceType
-
-##  if PieceColour == "W":
-##      if vacant != "":
-##        count = 0
-##        for each in pieces:
-##          count=count+1
-##          if vacant == each:
-##            print()
-##            print("White {0}  takes Black {1}".format(PieceType,pieces_full[count-1]))
-##
-##  if PieceColour == "B":
-##      if vacant != "":
-##        count = 0
-##        for each in pieces:
-##          count=count+1
-##          if vacant == each:
-##            print()                                                                                                                                                                                                                                      
-##            print("Black {0} takes White {1}".format(PieceType,pieces_full[count-1]))
-##    
 
 
 if __name__ == "__main__":
@@ -324,7 +312,7 @@ if __name__ == "__main__":
         if not(MoveIsLegal):
           print("That is not a legal move - please try again")
 
-      PieceColour,PieceType=GetPieceName(StartRank, StartFile, FinishRank, FinishFile)
+ 
       GameOver = CheckIfGameWillBeWon(Board, FinishRank, FinishFile)
       MakeMove(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseTurn)
 
