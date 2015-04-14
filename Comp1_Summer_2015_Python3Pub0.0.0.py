@@ -1,5 +1,5 @@
 # Skeleton Program code for the AQA COMP1 Summer 2015 examination
-# this code should be used in conjunction with the Preliminary Material
+ #his code should be used in conjunction with the Preliminary Material
 # written by the AQA COMP1 Programmer Team
 # developed in the Python 3.4 programming environment
 
@@ -21,6 +21,11 @@ def DisplayWhoseTurnItIs(WhoseTurn):
 
 def GetTypeOfGame():
   TypeOfGame = input("Do you want to play the sample game (enter Y for Yes)? ")
+  TypeOfGame = TypeOfGame.lower()[0]
+  while TypeOfGame != "y" and TypeOfGame != "n":
+      print("please enter Y or N")
+      TypeOfGame = input("Do you want to play the sample game (enter Y for Yes)? ")
+      TypeOfGame = TypeOfGame.lower()[0]
   return TypeOfGame
 
 def DisplayWinner(WhoseTurn):
@@ -118,34 +123,37 @@ def CheckEtluMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile):
 
 def CheckMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseTurn):
   MoveIsLegal = True
-  if (FinishFile == StartFile) and (FinishRank == StartRank):
+  if StartRank >8 or StartRank <1 or StartFile >8 or StartFile <1 or FinishRank >8 or FinishRank <1 or FinishFile >8 or FinishFile <1:
     MoveIsLegal = False
   else:
-    PieceType = Board[StartRank][StartFile][1]
-    PieceColour = Board[StartRank][StartFile][0]
-    if WhoseTurn == "W":
-      if PieceColour != "W":
-        MoveIsLegal = False
-      if Board[FinishRank][FinishFile][0] == "W":
-        MoveIsLegal = False
+    if (FinishFile == StartFile) and (FinishRank == StartRank):
+      MoveIsLegal = False
     else:
-      if PieceColour != "B":
-        MoveIsLegal = False
-      if Board[FinishRank][FinishFile][0] == "B":
-        MoveIsLegal = False
-    if MoveIsLegal == True:
-      if PieceType == "R":
-        MoveIsLegal = CheckRedumMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile, PieceColour)
-      elif PieceType == "S":
-        MoveIsLegal = CheckSarrumMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile)
-      elif PieceType == "M":
-        MoveIsLegal = CheckMarzazPaniMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile)
-      elif PieceType == "G":
-        MoveIsLegal = CheckGisgigirMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile)
-      elif PieceType == "N":
-        MoveIsLegal = CheckNabuMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile)
-      elif PieceType == "E":
-        MoveIsLegal = CheckEtluMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile)
+      PieceType = Board[StartRank][StartFile][1]
+      PieceColour = Board[StartRank][StartFile][0]
+      if WhoseTurn == "W":
+        if PieceColour != "W":
+          MoveIsLegal = False
+        if Board[FinishRank][FinishFile][0] == "W":
+          MoveIsLegal = False
+      else:
+        if PieceColour != "B":
+          MoveIsLegal = False
+        if Board[FinishRank][FinishFile][0] == "B":
+          MoveIsLegal = False
+      if MoveIsLegal == True:
+        if PieceType == "R":
+          MoveIsLegal = CheckRedumMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile, PieceColour)
+        elif PieceType == "S":
+          MoveIsLegal = CheckSarrumMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile)
+        elif PieceType == "M":
+          MoveIsLegal = CheckMarzazPaniMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile)
+        elif PieceType == "G":
+          MoveIsLegal = CheckGisgigirMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile)
+        elif PieceType == "N":
+          MoveIsLegal = CheckNabuMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile)
+        elif PieceType == "E":
+          MoveIsLegal = CheckEtluMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile)
   return MoveIsLegal
 
 def InitialiseBoard(Board, SampleGame):
@@ -246,7 +254,46 @@ def ConfirmMove(StartSquare, FinishSquare):
   confirm = confirm.lower()[0]
   return confirm
 
-    
+      
+def GetPieceName(StartRank, StartFile, FinishRank, FinishFile):
+  PieceColour = Board[StartRank][StartFile][0]
+  PieceType = Board[StartRank][StartFile][1]
+  ##vacant=Board[FinishRank][FinishFile][1]
+
+  pieces = ["R","S","M","G","N","E"]
+  pieces_full=["Reddum","Sarrum","Marzaz Pani","Gisgirgir","Nabu","Etlu"]
+
+  count=0
+  for each in pieces:
+      count = count+1
+      if PieceType == each:
+          PieceType = pieces_full[count -1]
+  if PieceColour == "W":
+    PieceColour = "White"
+  else:
+    PieceColour = "Black"
+  return PieceColour,PieceType
+
+##  if PieceColour == "W":
+##      if vacant != "":
+##        count = 0
+##        for each in pieces:
+##          count=count+1
+##          if vacant == each:
+##            print()
+##            print("White {0}  takes Black {1}".format(PieceType,pieces_full[count-1]))
+##
+##  if PieceColour == "B":
+##      if vacant != "":
+##        count = 0
+##        for each in pieces:
+##          count=count+1
+##          if vacant == each:
+##            print()                                                                                                                                                                                                                                      
+##            print("Black {0} takes White {1}".format(PieceType,pieces_full[count-1]))
+##    
+
+
 if __name__ == "__main__":
   Board = CreateBoard() #0th index not used
   StartSquare = 0 
@@ -255,12 +302,7 @@ if __name__ == "__main__":
   while PlayAgain == "Y":
     WhoseTurn = "W"
     GameOver = False
-    SampleGame = input("Do you want to play the sample game (enter Y for Yes)? ")
-    SampleGame = SampleGame.lower()[0]
-    while SampleGame != "y" and SampleGame != "n":
-      print("please enter Y or N")
-      SampleGame = input("Do you want to play the sample game (enter Y for Yes)? ")
-      SampleGame = SampleGame.lower()[0]
+    SampleGame = GetTypeOfGame()
     if ord(SampleGame) >= 97 and ord(SampleGame) <= 122:
       SampleGame = chr(ord(SampleGame) - 32)
     InitialiseBoard(Board, SampleGame)
@@ -282,40 +324,12 @@ if __name__ == "__main__":
         if not(MoveIsLegal):
           print("That is not a legal move - please try again")
 
-      PieceColour = Board[StartRank][StartFile][0]
-      PieceType = Board[StartRank][StartFile][1]
-      vacant=Board[FinishRank][FinishFile][1]
-
+      PieceColour,PieceType=GetPieceName(StartRank, StartFile, FinishRank, FinishFile)
       GameOver = CheckIfGameWillBeWon(Board, FinishRank, FinishFile)
       MakeMove(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseTurn)
 
       
-      
-      pieces = ["R","S","M","G","N","E"]
-      pieces_full=["Reddum","Sarrum","Marzaz Pani","Gisgirgir","Nabu","Etlu"]
 
-      count=0
-      for each in pieces:
-          count = count+1
-          if PieceType == each:
-              PieceType = pieces_full[count -1] 
-
-      if PieceColour == "W":
-          if vacant != "":
-            count = 0
-            for each in pieces:
-              count=count+1
-              if vacant == each:
-                print("White {0} takes Black {1}".format(PieceType,pieces_full[count-1]))
-
-      if PieceColour == "B":
-          if vacant != "":
-            count = 0
-            for each in pieces:
-              count=count+1
-              if vacant == each:
-                print("Black {0} takes White {1}".format(PieceType,pieces_full[count-1]))
-   
       if GameOver:
         DisplayWinner(WhoseTurn)
       if WhoseTurn == "W":
@@ -325,6 +339,4 @@ if __name__ == "__main__":
     PlayAgain = input("Do you want to play again (enter Y for Yes)? ")
     if ord(PlayAgain) >= 97 and ord(PlayAgain) <= 122:
       PlayAgain = chr(ord(PlayAgain) - 32)
-
-
 
