@@ -5,6 +5,7 @@
 
 BOARDDIMENSION = 8
 
+
 def CreateBoard():
   Board = []
   for Count in range(BOARDDIMENSION + 1):
@@ -194,28 +195,23 @@ def InitialiseBoard(Board, SampleGame):
         else:
           Board[RankNo][FileNo] = "  "    
                     
-##def GetMove(StartSquare, FinishSquare):
-##  StartSquare = int(input("Enter coordinates of square containing piece to move (file first): "))
-##  FinishSquare = int(input("Enter coordinates of square to move piece to (file first): "))
-##  return StartSquare, FinishSquare
+
 def GetMove(StartSquare, FinishSquare):
-  length = 5
+  length = 123456789
   while length !=2:
     try:
       StartSquare = int(input("Enter coordinates of square containing piece to move (file first): "))
-      string = str(StartSquare)
-      length = len(string)
+      length = len(str(StartSquare))
       if length!=2:
         print("Invalid input, please enter a file and a rank")
     except:
       print("Invalid input, please enter a file and a rank")
 
-  length = 5
+  length = 123456789
   while length !=2:
     try:
       FinishSquare = int(input("Enter coordinates of square to move piece to (file first):  "))
-      string = str(FinishSquare)
-      length = len(string)
+      length = len(str(StartSquare))
       if length!=2:
         print("Invalid input, please enter a file and a rank")
     except:
@@ -227,10 +223,10 @@ def GetMove(StartSquare, FinishSquare):
   return StartSquare, FinishSquare
 
 def MakeMove(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseTurn):
-  vacant=Board[FinishRank][FinishFile][1]
-  if vacant != "":
-    Colour1, Type1 = GetPieceName(StartRank, StartFile)
-    Colour2,Type2=GetPieceName(FinishRank, FinishFile)
+  
+  Colour1, Type1 = GetPieceName(StartRank, StartFile)
+  Colour2,Type2=GetPieceName(FinishRank, FinishFile)
+  if Type2 != " ":
     print("{0} {1} takes {2} {3}".format(Colour1, Type1,Colour2,Type2))
 
   if WhoseTurn == "W" and FinishRank == 1 and Board[StartRank][StartFile][1] == "R":
@@ -266,6 +262,7 @@ def GetPieceName(StartRank, StartFile):
   PieceColour = Board[StartRank][StartFile][0]
   PieceType = Board[StartRank][StartFile][1]
   
+  
 
   pieces = ["R","S","M","G","N","E"]
   pieces_full=["Reddum","Sarrum","Marzaz Pani","Gisgirgir","Nabu","Etlu"]
@@ -279,6 +276,7 @@ def GetPieceName(StartRank, StartFile):
     PieceColour = "White"
   else:
     PieceColour = "Black"
+  
   return PieceColour,PieceType
 
 
