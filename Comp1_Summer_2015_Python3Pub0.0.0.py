@@ -5,7 +5,28 @@
 
 BOARDDIMENSION = 8
 
+def display_menu():
+  print("1. Start new game")
+  print("2. Load existing game")
+  print("3. Play sample game")
+  print("4. View high scores")
+  print("5. Settings")
+  print("6. Quit program")
 
+def get_menu_selection():
+  menu_selection = int(input("Please enter your menu choice: ")
+  return menu_selection
+
+def make_selection(menu_selection):
+      if menu_selection == 1:
+      elif menu_selection == 2:
+      elif menu_selection == 3:
+      elif menu_selection == 4:
+      elif menu_selection == 5:
+      elif menu_selection == 6:
+      
+
+                
 def CreateBoard():
   Board = []
   for Count in range(BOARDDIMENSION + 1):
@@ -124,7 +145,7 @@ def CheckEtluMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile):
 
 def CheckMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseTurn):
   MoveIsLegal = True
-  if StartRank >8 or StartRank <1 or StartFile >8 or StartFile <1 or FinishRank >8 or FinishRank <1 or FinishFile >8 or FinishFile <1:
+  if StartRank >BOARDDIMENSION or StartRank <1 or StartFile >BOARDDIMENSION or StartFile <1 or FinishRank >BOARDDIMENSION or FinishRank <1 or FinishFile >BOARDDIMENSION or FinishFile <1:
     MoveIsLegal = False
   else:
     if (FinishFile == StartFile) and (FinishRank == StartRank):
@@ -279,6 +300,27 @@ def GetPieceName(StartRank, StartFile):
   
   return PieceColour,PieceType
 
+def display_menu():
+  print("1. Start new game")
+  print("2. Load existing game")
+  print("3. Play sample game")
+  print("4. View high scores")
+  print("5. Settings")
+  print("6. Quit program")
+
+def get_menu_selection():
+  menu_selection = int(input("Please enter your menu choice: ")
+  return menu_selection
+
+def make_selection(menu_selection):
+      if menu_selcetion == 1:
+          
+      elif menu_selcetion == 2:
+      elif menu_selcetion == 3:
+      elif menu_selcetion == 4:
+      elif menu_selcetion == 5:
+      elif menu_selcetion == 6:
+      
 
 if __name__ == "__main__":
   Board = CreateBoard() #0th index not used
