@@ -14,17 +14,18 @@ def display_menu():
   print("6. Quit program")
 
 def get_menu_selection():
-  menu_selection = int(input("Please enter your menu choice: ")
+  menu_selection = int(input("Please enter your menu choice: "))
   return menu_selection
 
-def make_selection(menu_selection):
-      if menu_selection == 1:
-      elif menu_selection == 2:
-      elif menu_selection == 3:
-      elif menu_selection == 4:
-      elif menu_selection == 5:
-      elif menu_selection == 6:
-      
+##def make_selection(menu_selection):
+##      if menu_selection == 1:
+##        
+##      elif menu_selection == 2:
+##      elif menu_selection == 3:
+##      elif menu_selection == 4:
+##      elif menu_selection == 5:
+##      elif menu_selection == 6:
+##      
 
                 
 def CreateBoard():
@@ -44,6 +45,7 @@ def DisplayWhoseTurnItIs(WhoseTurn):
 def GetTypeOfGame():
   TypeOfGame = input("Do you want to play the sample game (enter Y for Yes)? ")
   TypeOfGame = TypeOfGame.lower()[0]
+                       
   while TypeOfGame != "y" and TypeOfGame != "n":
       print("please enter Y or N")
       TypeOfGame = input("Do you want to play the sample game (enter Y for Yes)? ")
@@ -301,28 +303,40 @@ def GetPieceName(StartRank, StartFile):
   return PieceColour,PieceType
 
 def display_menu():
+  print("Main Menu")
+  print()
   print("1. Start new game")
   print("2. Load existing game")
-  print("3. Play sample game")
+  print("3. Play sample game") 
   print("4. View high scores")
   print("5. Settings")
   print("6. Quit program")
 
 def get_menu_selection():
-  menu_selection = int(input("Please enter your menu choice: ")
+  valid = False
+  while valid == False:
+    menu_selection = int(input("Please enter your menu choice: "))
+    if 0< menu_selection <7 :
+      valid = True
   return menu_selection
 
 def make_selection(menu_selection):
-      if menu_selcetion == 1:
-          
-      elif menu_selcetion == 2:
-      elif menu_selcetion == 3:
-      elif menu_selcetion == 4:
-      elif menu_selcetion == 5:
-      elif menu_selcetion == 6:
+      if menu_selection == 1:
+         
+          play_game("n")
+      elif menu_selection == 2:
+        pass
+      elif menu_selection == 3:
+        
+        play_game("y")
+      elif menu_selection == 4:
+        pass
+      elif menu_selection == 5:
+        pass
+      elif menu_selection == 6:
+        pass
       
-
-if __name__ == "__main__":
+def play_game(SampleGame):
   Board = CreateBoard() #0th index not used
   StartSquare = 0 
   FinishSquare = 0
@@ -330,7 +344,7 @@ if __name__ == "__main__":
   while PlayAgain == "Y":
     WhoseTurn = "W"
     GameOver = False
-    SampleGame = GetTypeOfGame()
+    
     if ord(SampleGame) >= 97 and ord(SampleGame) <= 122:
       SampleGame = chr(ord(SampleGame) - 32)
     InitialiseBoard(Board, SampleGame)
@@ -360,6 +374,7 @@ if __name__ == "__main__":
 
       if GameOver:
         DisplayWinner(WhoseTurn)
+        get_menu_selection()
       if WhoseTurn == "W":
         WhoseTurn = "B"
       else:
@@ -368,3 +383,9 @@ if __name__ == "__main__":
     if ord(PlayAgain) >= 97 and ord(PlayAgain) <= 122:
       PlayAgain = chr(ord(PlayAgain) - 32)
 
+def main():
+  display_menu()
+  menu_selection = get_menu_selection()
+  make_selection(menu_selection)
+
+main()
