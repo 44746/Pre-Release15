@@ -160,18 +160,24 @@ def CheckMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseT
 
 def InitialiseBoard(Board, SampleGame):
   if SampleGame == "Y":
-    for RankNo in range(1, BOARDDIMENSION + 1):
+    InitialseSampleBoard(Board)
+  elif SampleGame == "N":
+    InitialiseNewBoard(Board)
+
+def InitialseSampleBoard(Board):
+  for RankNo in range(1, BOARDDIMENSION + 1):
       for FileNo in range(1, BOARDDIMENSION + 1):
         Board[RankNo][FileNo] = "  "
-    Board[1][2] = "BG"
-    Board[1][4] = "BS"
-    Board[1][8] = "WG"
-    Board[2][1] = "WR"
-    Board[3][1] = "WS"
-    Board[3][2] = "BE"
-    Board[3][8] = "BE"
-    Board[6][8] = "BR"
-  else:
+        Board[1][2] = "BG"
+        Board[1][4] = "BS"
+        Board[1][8] = "WG"
+        Board[2][1] = "WR"
+        Board[3][1] = "WS"
+        Board[3][2] = "BE"
+        Board[3][8] = "BE"
+        Board[6][8] = "BR"
+
+def InitialiseNewBoard(Board):
     for RankNo in range(1, BOARDDIMENSION + 1):
       for FileNo in range(1, BOARDDIMENSION + 1):
         if RankNo == 2:
@@ -197,32 +203,23 @@ def InitialiseBoard(Board, SampleGame):
           Board[RankNo][FileNo] = "  "    
                     
 
-def GetMove(StartSquare, FinishSquare):
+def GetMove(Square,Print):
   length = 123456789
   while length !=2 :
     try:
-      StartSquare = int(input("Enter coordinates of square containing piece to move (file first): "))
-      length = len(str(StartSquare))
+      Square = int(input("{0}".format(Print)))
+      length = len(str(Square))
       if length!=2:
         print("Invalid input, please enter a file and a rank")
     except:
    
       print("Invalid input, please enter a file and a rank")
-
-  length = 123456789
-  while length !=2:
-    try:
-      FinishSquare = int(input("Enter coordinates of square to move piece to (file first):  "))
-      length = len(str(StartSquare))
-      if length!=2:
-        print("Invalid input, please enter a file and a rank")
-    except:
-      print("Invalid input, please enter a file and a rank")     
+    
       
     
   
 
-  return StartSquare, FinishSquare
+  return Square
 
 def MakeMove(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseTurn):
   print()
@@ -312,7 +309,35 @@ def make_selection(menu_selection):
         pass
       elif menu_selection == 6:
         print("Game Quitted")
-      
+
+def option_menu():
+  print()
+  print("Options")
+  print()
+  print("1. Save Game")
+  print("2. Quit to Menu")
+  print("3. Return to Game")
+  print("4. Surrender")
+
+def option_choice():
+  valid = False
+  while valid == False:
+    option = int(input("Please enter your menu choice: "))
+    if 0< option < 5:
+      valid = True
+    else:
+      print("Invalid Input")
+
+  if option == 1:
+    pass
+  elif option == 2:
+    pass
+  elif option == 3:
+    print("Returning to game")
+    print()
+  elif option == 4:
+    print("Surrendering...")
+  
 def play_game(SampleGame):
   Board = CreateBoard() #0th index not used
   StartSquare = 0 
@@ -332,8 +357,19 @@ def play_game(SampleGame):
       while not(MoveIsLegal):
         confirm = "n"
         while confirm != "y":
-          StartSquare, FinishSquare = GetMove(StartSquare)
-          confirm = ConfirmMove(StartSquare,FinishSquare)
+          StartSquare = GetMove(StartSquare,"Enter coordinates of square containing piece to move (file first) or type '-1' for menu: ")
+          if StartSquare == -1:
+            option_menu()
+            option_choice()
+          FinishSquare = 12345
+          if StartSquare != -1:
+            FinishSquare = GetMove(FinishSquare,"Enter coordinates of square to move piece to (file first) or type '-1' for menu:  ")
+          if FinishSquare == -1:
+            option_menu()
+            option_choice()
+          if StartSquare != -1 and FinishSquare != -1: 
+            confirm = ConfirmMove(StartSquare,FinishSquare)
+            
         
         StartRank = StartSquare % 10
         StartFile = StartSquare // 10
