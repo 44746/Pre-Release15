@@ -5,28 +5,6 @@
 
 BOARDDIMENSION = 8
 
-def display_menu():
-  print("1. Start new game")
-  print("2. Load existing game")
-  print("3. Play sample game")
-  print("4. View high scores")
-  print("5. Settings")
-  print("6. Quit program")
-
-def get_menu_selection():
-  menu_selection = int(input("Please enter your menu choice: "))
-  return menu_selection
-
-##def make_selection(menu_selection):
-##      if menu_selection == 1:
-##        
-##      elif menu_selection == 2:
-##      elif menu_selection == 3:
-##      elif menu_selection == 4:
-##      elif menu_selection == 5:
-##      elif menu_selection == 6:
-##      
-
                 
 def CreateBoard():
   Board = []
@@ -221,13 +199,14 @@ def InitialiseBoard(Board, SampleGame):
 
 def GetMove(StartSquare, FinishSquare):
   length = 123456789
-  while length !=2:
+  while length !=2 :
     try:
       StartSquare = int(input("Enter coordinates of square containing piece to move (file first): "))
       length = len(str(StartSquare))
       if length!=2:
         print("Invalid input, please enter a file and a rank")
     except:
+   
       print("Invalid input, please enter a file and a rank")
 
   length = 123456789
@@ -246,21 +225,22 @@ def GetMove(StartSquare, FinishSquare):
   return StartSquare, FinishSquare
 
 def MakeMove(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseTurn):
+  print()
+
   
-  Colour1, Type1 = GetPieceName(StartRank, StartFile)
-  Colour2,Type2=GetPieceName(FinishRank, FinishFile)
+  Colour1, Type1 = GetPieceName(Board[StartRank][StartFile])
+  Colour2,Type2=GetPieceName(Board[FinishRank][FinishFile])
   if Type2 != " ":
+    
     print("{0} {1} takes {2} {3}".format(Colour1, Type1,Colour2,Type2))
 
   if WhoseTurn == "W" and FinishRank == 1 and Board[StartRank][StartFile][1] == "R":
     Board[FinishRank][FinishFile] = "WM"
     Board[StartRank][StartFile] = "  "
-    print()
     print("White Redum has been promoted to Marzaz Pani")
   elif WhoseTurn == "B" and FinishRank == 8 and Board[StartRank][StartFile][1] == "R":
     Board[FinishRank][FinishFile] = "BM"
     Board[StartRank][StartFile] = "  "
-    print()
     print("Black Redum has been promoted to Marzaz Pani")
   
     
@@ -281,21 +261,17 @@ def ConfirmMove(StartSquare, FinishSquare):
   return confirm
 
       
-def GetPieceName(StartRank, StartFile):
-  PieceColour = Board[StartRank][StartFile][0]
-  PieceType = Board[StartRank][StartFile][1]
-  
-  
-
+def GetPieceName(Piece):
   pieces = ["R","S","M","G","N","E"]
   pieces_full=["Reddum","Sarrum","Marzaz Pani","Gisgirgir","Nabu","Etlu"]
 
   count=0
   for each in pieces:
       count = count+1
-      if PieceType == each:
+      if Piece[1] == each:
           PieceType = pieces_full[count -1]
-  if PieceColour == "W":
+
+  if Piece[0] == "W":
     PieceColour = "White"
   else:
     PieceColour = "Black"
@@ -315,6 +291,7 @@ def display_menu():
 def get_menu_selection():
   valid = False
   while valid == False:
+    print()
     menu_selection = int(input("Please enter your menu choice: "))
     if 0< menu_selection <7 :
       valid = True
@@ -334,7 +311,7 @@ def make_selection(menu_selection):
       elif menu_selection == 5:
         pass
       elif menu_selection == 6:
-        pass
+        print("Game Quitted")
       
 def play_game(SampleGame):
   Board = CreateBoard() #0th index not used
@@ -355,7 +332,7 @@ def play_game(SampleGame):
       while not(MoveIsLegal):
         confirm = "n"
         while confirm != "y":
-          StartSquare, FinishSquare = GetMove(StartSquare, FinishSquare)
+          StartSquare, FinishSquare = GetMove(StartSquare)
           confirm = ConfirmMove(StartSquare,FinishSquare)
         
         StartRank = StartSquare % 10
@@ -383,9 +360,7 @@ def play_game(SampleGame):
     if ord(PlayAgain) >= 97 and ord(PlayAgain) <= 122:
       PlayAgain = chr(ord(PlayAgain) - 32)
 
-def main():
+if __name__ == "__main__":
   display_menu()
   menu_selection = get_menu_selection()
   make_selection(menu_selection)
-
-main()
