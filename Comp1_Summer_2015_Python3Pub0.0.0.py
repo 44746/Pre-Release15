@@ -204,7 +204,7 @@ def InitialiseNewBoard(Board):
                     
 
 def GetMove(Square,Print):
-  length = 123456789
+  length = 12345
   while length !=2 :
     try:
       Square = int(input("{0}".format(Print)))
@@ -214,11 +214,6 @@ def GetMove(Square,Print):
     except:
    
       print("Invalid input, please enter a file and a rank")
-    
-      
-    
-  
-
   return Square
 
 def MakeMove(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseTurn):
@@ -294,22 +289,27 @@ def get_menu_selection():
       valid = True
   return menu_selection
 
-def make_selection(menu_selection):
+def make_selection(menu_selection,main_menu):
+   for count in range(2):
       if menu_selection == 1:
          
-          play_game("n")
+          menu_selection= play_game("n")
       elif menu_selection == 2:
         pass
       elif menu_selection == 3:
         
-        play_game("y")
+        menu_selection = play_game("y")
       elif menu_selection == 4:
         pass
       elif menu_selection == 5:
         pass
       elif menu_selection == 6:
-        print("Game Quitted")
-
+        print("Exiting Game...")
+        main_menu = False
+        
+      else:
+        main_menu = True
+  return main_menu     
 def option_menu():
   print()
   print("Options")
@@ -319,7 +319,7 @@ def option_menu():
   print("3. Return to Game")
   print("4. Surrender")
 
-def option_choice():
+def option_choice(PlayAgain):
   valid = False
   while valid == False:
     option = int(input("Please enter your menu choice: "))
@@ -331,7 +331,8 @@ def option_choice():
   if option == 1:
     pass
   elif option == 2:
-    pass
+    PlayAgain = "n"
+    return PlayAgain
   elif option == 3:
     print("Returning to game")
     print()
@@ -360,13 +361,20 @@ def play_game(SampleGame):
           StartSquare = GetMove(StartSquare,"Enter coordinates of square containing piece to move (file first) or type '-1' for menu: ")
           if StartSquare == -1:
             option_menu()
-            option_choice()
+            PlayAgain = option_choice(PlayAgain)
+            if PlayAgain == "n":
+              confirm = "y"
+              MoveIsLegal = True
+              GameOver = True
+              menu_selection = 12345
+              return menu_selection
+              
           FinishSquare = 12345
           if StartSquare != -1:
             FinishSquare = GetMove(FinishSquare,"Enter coordinates of square to move piece to (file first) or type '-1' for menu:  ")
           if FinishSquare == -1:
             option_menu()
-            option_choice()
+            PlayAgain = option_choice(PlayAgain)
           if StartSquare != -1 and FinishSquare != -1: 
             confirm = ConfirmMove(StartSquare,FinishSquare)
             
@@ -375,28 +383,29 @@ def play_game(SampleGame):
         StartFile = StartSquare // 10
         FinishRank = FinishSquare % 10
         FinishFile = FinishSquare // 10
-        MoveIsLegal = CheckMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseTurn)
+        if PlayAgain == "Y":
+          MoveIsLegal = CheckMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseTurn)
         if not(MoveIsLegal):
           print("That is not a legal move - please try again")
 
- 
-      GameOver = CheckIfGameWillBeWon(Board, FinishRank, FinishFile)
-      MakeMove(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseTurn)
+        if PlayAgain == "Y":
+          GameOver = CheckIfGameWillBeWon(Board, FinishRank, FinishFile)
+          MakeMove(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseTurn)
 
       
 
-      if GameOver:
-        DisplayWinner(WhoseTurn)
-        get_menu_selection()
-      if WhoseTurn == "W":
-        WhoseTurn = "B"
-      else:
-        WhoseTurn = "W"
-    PlayAgain = input("Do you want to play again (enter Y for Yes)? ")
-    if ord(PlayAgain) >= 97 and ord(PlayAgain) <= 122:
-      PlayAgain = chr(ord(PlayAgain) - 32)
+          if GameOver:
+            DisplayWinner(WhoseTurn)
+            get_menu_selection()
+          if WhoseTurn == "W":
+            WhoseTurn = "B"
+          else:
+            WhoseTurn = "W"
+        
 
 if __name__ == "__main__":
-  display_menu()
-  menu_selection = get_menu_selection()
-  make_selection(menu_selection)
+  main_menu = True
+  while main_menu == True:
+    display_menu()
+    menu_selection = get_menu_selection()
+    main_menu = make_selection(menu_selection,main_menu)
