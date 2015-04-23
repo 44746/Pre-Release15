@@ -69,6 +69,18 @@ def CheckRedumMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile, C
       CheckRedumMoveIsLegal = True
     elif abs(FinishFile - StartFile) == 1 and Board[FinishRank][FinishFile][0] == "W":
       CheckRedumMoveIsLegal = True
+  if ColourOfPiece == "W":
+    if StartRank == BOARDDIMENSION -1:
+      if StartFile == FinishFile:
+        if abs(FinishRank - StartRank) == 2:
+          CheckRedumMoveIsLegal = True
+         
+  else:
+    if StartRank == 2:
+      if StartFile == FinishFile:
+        if abs(FinishRank - StartRank) == 2:
+          CheckRedumMoveIsLegal = True
+      
   return CheckRedumMoveIsLegal
 
 def CheckSarrumMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile):
@@ -107,19 +119,20 @@ def CheckGisgigirMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile
 
 def CheckNabuMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile):
   CheckNabuMoveIsLegal = False
-  if abs(FinishFile - StartFile) == 1 and abs(FinishRank - StartRank) == 1:
+  
+  if abs(FinishRank - StartRank) > 0 and abs(FinishFile - StartFile) >0 :
     CheckNabuMoveIsLegal = True
   return CheckNabuMoveIsLegal
 
 def CheckMarzazPaniMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile):
   CheckMarzazPaniMoveIsLegal = False
-  if (abs(FinishFile - StartFile) == 1 and abs(FinishRank - StartRank) == 0) or (abs(FinishFile - StartFile) == 0 and abs(FinishRank - StartRank) ==1):
+  if (abs(FinishFile - StartFile) == 1 and abs(FinishRank - StartRank) == 0) or (abs(FinishFile - StartFile) == 0 and abs(FinishRank - StartRank) ==1) or  abs(FinishFile - StartFile) == 1 and abs(FinishRank - StartRank) ==1:
     CheckMarzazPaniMoveIsLegal = True
   return CheckMarzazPaniMoveIsLegal
 
 def CheckEtluMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile):
   CheckEtluMoveIsLegal = False
-  if (abs(FinishFile - StartFile) == 2 and abs(FinishRank - StartRank) == 0) or (abs(FinishFile - StartFile) == 0 and abs(FinishRank - StartRank) == 2):
+  if (abs(FinishFile - StartFile) == 2 and abs(FinishRank - StartRank) == 1) or  (abs(FinishFile - StartFile) == 1 and abs(FinishRank - StartRank) == 2):
     CheckEtluMoveIsLegal = True
   return CheckEtluMoveIsLegal
 
@@ -218,13 +231,13 @@ def GetMove(Square,Print):
 
 def MakeMove(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseTurn):
   print()
-
   
   Colour1, Type1 = GetPieceName(Board[StartRank][StartFile])
   Colour2,Type2=GetPieceName(Board[FinishRank][FinishFile])
   if Type2 != " ":
-    
-    print("{0} {1} takes {2} {3}".format(Colour1, Type1,Colour2,Type2))
+    if Type1 != " ":
+
+      print("{0} {1} takes {2} {3}".format(Colour1, Type1,Colour2,Type2))
 
   if WhoseTurn == "W" and FinishRank == 1 and Board[StartRank][StartFile][1] == "R":
     Board[FinishRank][FinishFile] = "WM"
@@ -256,12 +269,14 @@ def ConfirmMove(StartSquare, FinishSquare):
 def GetPieceName(Piece):
   pieces = ["R","S","M","G","N","E"]
   pieces_full=["Reddum","Sarrum","Marzaz Pani","Gisgirgir","Nabu","Etlu"]
-
+  PieceType = " "
   count=0
   for each in pieces:
       count = count+1
       if Piece[1] == each:
           PieceType = pieces_full[count -1]
+      
+        
 
   if Piece[0] == "W":
     PieceColour = "White"
@@ -306,10 +321,11 @@ def make_selection(menu_selection,main_menu):
       elif menu_selection == 6:
         print("Exiting Game...")
         main_menu = False
-        
+        return main_menu     
+
       else:
         main_menu = True
-  return main_menu     
+        return main_menu     
 def option_menu():
   print()
   print("Options")
@@ -332,12 +348,17 @@ def option_choice(PlayAgain):
     pass
   elif option == 2:
     PlayAgain = "n"
-    return PlayAgain
+    
   elif option == 3:
+    print()
     print("Returning to game")
     print()
   elif option == 4:
+    print()
     print("Surrendering...")
+  
+  return PlayAgain,str(option)
+
   
 def play_game(SampleGame):
   Board = CreateBoard() #0th index not used
@@ -361,20 +382,62 @@ def play_game(SampleGame):
           StartSquare = GetMove(StartSquare,"Enter coordinates of square containing piece to move (file first) or type '-1' for menu: ")
           if StartSquare == -1:
             option_menu()
-            PlayAgain = option_choice(PlayAgain)
+            PlayAgain,option = option_choice(PlayAgain)
             if PlayAgain == "n":
               confirm = "y"
               MoveIsLegal = True
               GameOver = True
               menu_selection = 12345
-              return menu_selection
+            if option == "4":
+              if WhoseTurn== "W":
+                print()
+                print("White surrenders, Black wins!")
+                print()
+                confirm = "y"
+                MoveIsLegal = True
+                GameOver = True
+                menu_selection = 12345
+              else:
+                print()
+                print("Black surrenders, White wins!")
+                print()
+                confirm = "y"
+                MoveIsLegal = True
+                GameOver = True
+                menu_selection = 12345
+            return menu_selection
               
           FinishSquare = 12345
           if StartSquare != -1:
             FinishSquare = GetMove(FinishSquare,"Enter coordinates of square to move piece to (file first) or type '-1' for menu:  ")
           if FinishSquare == -1:
             option_menu()
-            PlayAgain = option_choice(PlayAgain)
+            PlayAgain,option = option_choice(PlayAgain)
+            if PlayAgain == "n":
+              confirm = "y"
+              MoveIsLegal = True
+              GameOver = True
+              menu_selection = 12345
+
+            if option == "4":
+              if WhoseTurn== "W":
+                print()
+                print("White surrenders, Black wins!")
+                print()
+                confirm = "y"
+                MoveIsLegal = True
+                GameOver = True
+                menu_selection = 12345
+            else:
+              print()
+              print("Black surrenders, White wins!")
+              print()
+              confirm = "y"
+              MoveIsLegal = True
+              GameOver = True
+              menu_selection = 12345
+              return menu_selection
+            
           if StartSquare != -1 and FinishSquare != -1: 
             confirm = ConfirmMove(StartSquare,FinishSquare)
             
