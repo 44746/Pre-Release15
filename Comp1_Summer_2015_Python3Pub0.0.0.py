@@ -119,9 +119,12 @@ def CheckGisgigirMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile
 
 def CheckNabuMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile):
   CheckNabuMoveIsLegal = False
-  
-  if abs(FinishRank - StartRank) > 0 and abs(FinishFile - StartFile) >0 :
-    CheckNabuMoveIsLegal = True
+  RankDifference = FinishRank - StartRank
+  FileDifference = FinishFile - StartFile
+  for count in range(BOARDDIMENSION):
+    if FileDifference == RankDifference:
+      CheckNabuMoveIsLegal = True
+
   return CheckNabuMoveIsLegal
 
 def CheckMarzazPaniMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile):
@@ -286,6 +289,7 @@ def GetPieceName(Piece):
   return PieceColour,PieceType
 
 def display_menu():
+  print()
   print("Main Menu")
   print()
   print("1. Start new game")
@@ -387,7 +391,7 @@ def play_game(SampleGame):
               confirm = "y"
               MoveIsLegal = True
               GameOver = True
-              menu_selection = 12345
+              menu_selection = None
             if option == "4":
               if WhoseTurn== "W":
                 print()
@@ -396,7 +400,7 @@ def play_game(SampleGame):
                 confirm = "y"
                 MoveIsLegal = True
                 GameOver = True
-                menu_selection = 12345
+                menu_selection = None
               else:
                 print()
                 print("Black surrenders, White wins!")
@@ -404,7 +408,7 @@ def play_game(SampleGame):
                 confirm = "y"
                 MoveIsLegal = True
                 GameOver = True
-                menu_selection = 12345
+                menu_selection = None
             return menu_selection
               
           FinishSquare = 12345
@@ -417,7 +421,7 @@ def play_game(SampleGame):
               confirm = "y"
               MoveIsLegal = True
               GameOver = True
-              menu_selection = 12345
+              menu_selection = None
 
             if option == "4":
               if WhoseTurn== "W":
@@ -427,7 +431,7 @@ def play_game(SampleGame):
                 confirm = "y"
                 MoveIsLegal = True
                 GameOver = True
-                menu_selection = 12345
+                menu_selection = None
             else:
               print()
               print("Black surrenders, White wins!")
@@ -435,21 +439,23 @@ def play_game(SampleGame):
               confirm = "y"
               MoveIsLegal = True
               GameOver = True
-              menu_selection = 12345
+              menu_selection = None
               return menu_selection
+          
             
-          if StartSquare != -1 and FinishSquare != -1: 
+          
+          StartRank = StartSquare % 10
+          StartFile = StartSquare // 10
+          FinishRank = FinishSquare % 10
+          FinishFile = FinishSquare // 10
+          if PlayAgain == "Y":
+            MoveIsLegal = CheckMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseTurn)
+          if not(MoveIsLegal):
+            print("That is not a legal move - please try again")
+
+          if StartSquare != -1 and FinishSquare != -1 and MoveIsLegal != False: 
             confirm = ConfirmMove(StartSquare,FinishSquare)
-            
-        
-        StartRank = StartSquare % 10
-        StartFile = StartSquare // 10
-        FinishRank = FinishSquare % 10
-        FinishFile = FinishSquare // 10
-        if PlayAgain == "Y":
-          MoveIsLegal = CheckMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseTurn)
-        if not(MoveIsLegal):
-          print("That is not a legal move - please try again")
+
 
         if PlayAgain == "Y":
           GameOver = CheckIfGameWillBeWon(Board, FinishRank, FinishFile)
