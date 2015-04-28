@@ -2,7 +2,7 @@
  #his code should be used in conjunction with the Preliminary Material
 # written by the AQA COMP1 Programmer Team
 # developed in the Python 3.4 programming environment
-
+import pdb
 BOARDDIMENSION = 8
 
                 
@@ -118,12 +118,37 @@ def CheckGisgigirMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile
   return GisgigirMoveIsLegal
 
 def CheckNabuMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile):
+  #pdb.set_trace()
   CheckNabuMoveIsLegal = False
-  RankDifference = FinishRank - StartRank
-  FileDifference = FinishFile - StartFile
-  for count in range(BOARDDIMENSION):
-    if FileDifference == RankDifference:
-      CheckNabuMoveIsLegal = True
+  RankDifference = abs(FinishRank - StartRank)
+  FileDifference = abs(FinishFile - StartFile)
+  
+  if FileDifference == RankDifference:
+    CheckNabuMoveIsLegal = True
+
+  if StartFile < FinishFile and StartRank <FinishRank:
+    for Count in range(1, RankDifference):
+      if StartRank + Count <= BOARDDIMENSION and StartFile+ Count <= BOARDDIMENSION:
+        if Board[StartRank + Count][StartFile + Count] != "  ":
+          CheckNabuMoveIsLegal = False
+
+  if StartFile > FinishFile and StartRank > FinishRank:
+    for Count in range(1, RankDifference):
+      if StartRank - Count >= 1 and StartFile - count >= 1:
+        if Board[StartRank - Count][StartFile -Count] != "  ":
+          CheckNabuMoveIsLegal = False
+
+  if StartFile > FinishFile and StartRank < FinishRank:
+    for Count in range(1, RankDifference):
+      if StartFile + Count <= BOARDDIMENSION and StartRank - count >= 1:
+        if Board[StartRank - Count][StartFile + Count] != "  ":
+          CheckNabuMoveIsLegal = False
+
+  if StartFile < FinishFile and StartRank > FinishRank:
+    for Count in range(1, RankDifference):
+      if StartRank + Count <= BOARDDIMENSION and StartFile - count >= 1:
+        if Board[StartRank + Count][StartFile - Count] != "  ":
+          CheckNabuMoveIsLegal = False
 
   return CheckNabuMoveIsLegal
 
