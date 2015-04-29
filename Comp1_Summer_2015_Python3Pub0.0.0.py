@@ -134,19 +134,19 @@ def CheckNabuMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile):
 
   if StartFile > FinishFile and StartRank > FinishRank:
     for Count in range(1, RankDifference):
-      if StartRank - Count >= 1 and StartFile - count >= 1:
+      if StartRank - Count >= 1 and StartFile - Count >= 1:
         if Board[StartRank - Count][StartFile -Count] != "  ":
           CheckNabuMoveIsLegal = False
 
   if StartFile > FinishFile and StartRank < FinishRank:
     for Count in range(1, RankDifference):
-      if StartFile + Count <= BOARDDIMENSION and StartRank - count >= 1:
+      if StartFile + Count <= BOARDDIMENSION and StartRank - Count >= 1:
         if Board[StartRank - Count][StartFile + Count] != "  ":
           CheckNabuMoveIsLegal = False
 
   if StartFile < FinishFile and StartRank > FinishRank:
     for Count in range(1, RankDifference):
-      if StartRank + Count <= BOARDDIMENSION and StartFile - count >= 1:
+      if StartRank + Count <= BOARDDIMENSION and StartFile - Count >= 1:
         if Board[StartRank + Count][StartFile - Count] != "  ":
           CheckNabuMoveIsLegal = False
 
@@ -348,6 +348,7 @@ def make_selection(menu_selection,main_menu):
       elif menu_selection == 5:
         pass
       elif menu_selection == 6:
+        save_high_scores(scores)
         print("Exiting Game...")
         main_menu = False
         return main_menu     
@@ -388,6 +389,11 @@ def option_choice(PlayAgain):
   
   return PlayAgain,str(option)
 
+def save_high_scores(scores):
+  with open("high_scores.txt", mode="w", encoding = "utf-8") as file:
+    file.write(scores)
+  
+
   
 def play_game(SampleGame):
   Board = CreateBoard() #0th index not used
@@ -405,7 +411,7 @@ def play_game(SampleGame):
       DisplayBoard(Board)
       DisplayWhoseTurnItIs(WhoseTurn)
       MoveIsLegal = False
-      while not(MoveIsLegal):
+      while MoveIsLegal == False:
         confirm = "n"
         while confirm != "y":
           StartSquare = GetMove(StartSquare,"Enter coordinates of square containing piece to move (file first) or type '-1' for menu: ")
@@ -422,6 +428,7 @@ def play_game(SampleGame):
                 print()
                 print("White surrenders, Black wins!")
                 print()
+                PlayAgain == "N"
                 confirm = "y"
                 MoveIsLegal = True
                 GameOver = True
@@ -430,11 +437,12 @@ def play_game(SampleGame):
                 print()
                 print("Black surrenders, White wins!")
                 print()
+                PlayAgain == "N"
                 confirm = "y"
                 MoveIsLegal = True
                 GameOver = True
                 menu_selection = None
-            return menu_selection
+            
               
           FinishSquare = 12345
           if StartSquare != -1:
@@ -454,35 +462,37 @@ def play_game(SampleGame):
                 print("White surrenders, Black wins!")
                 print()
                 confirm = "y"
+                PlayAgain = "N"
                 MoveIsLegal = True
                 GameOver = True
                 menu_selection = None
+                
             else:
               print()
               print("Black surrenders, White wins!")
               print()
               confirm = "y"
+              PlayAgain = "N"
               MoveIsLegal = True
               GameOver = True
               menu_selection = None
-              return menu_selection
-          
-            
-          
+              
+
           StartRank = StartSquare % 10
           StartFile = StartSquare // 10
           FinishRank = FinishSquare % 10
           FinishFile = FinishSquare // 10
+          pdb.set_trace()
           if PlayAgain == "Y":
             MoveIsLegal = CheckMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseTurn)
-          if not(MoveIsLegal):
+          if MoveIsLegal != True:
             print("That is not a legal move - please try again")
 
           if StartSquare != -1 and FinishSquare != -1 and MoveIsLegal != False: 
             confirm = ConfirmMove(StartSquare,FinishSquare)
 
-
-        if PlayAgain == "Y":
+       
+        if option != "4":
           GameOver = CheckIfGameWillBeWon(Board, FinishRank, FinishFile)
           MakeMove(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseTurn)
 
@@ -491,11 +501,14 @@ def play_game(SampleGame):
           if GameOver:
             DisplayWinner(WhoseTurn)
             get_menu_selection()
+            menu_selection = 123
+
           if WhoseTurn == "W":
             WhoseTurn = "B"
           else:
             WhoseTurn = "W"
         
+  return menu_selection
 
 if __name__ == "__main__":
   main_menu = True
