@@ -333,7 +333,7 @@ def get_menu_selection():
       valid = True
   return menu_selection
 
-def make_selection(menu_selection,main_menu):
+def make_selection(menu_selection,main_menu,scores):
    for count in range(2):
       if menu_selection == 1:
          
@@ -391,11 +391,13 @@ def option_choice(PlayAgain):
 
 def save_high_scores(scores):
   with open("high_scores.txt", mode="w", encoding = "utf-8") as file:
-    file.write(scores)
+    for each in scores:
+      file.write(each)
   
 
   
 def play_game(SampleGame):
+  
   Board = CreateBoard() #0th index not used
   StartSquare = 0 
   FinishSquare = 0
@@ -408,6 +410,7 @@ def play_game(SampleGame):
       SampleGame = chr(ord(SampleGame) - 32)
     InitialiseBoard(Board, SampleGame)
     while not(GameOver):
+      
       DisplayBoard(Board)
       DisplayWhoseTurnItIs(WhoseTurn)
       MoveIsLegal = False
@@ -428,7 +431,7 @@ def play_game(SampleGame):
                 print()
                 print("White surrenders, Black wins!")
                 print()
-                PlayAgain == "N"
+                PlayAgain = "N"
                 confirm = "y"
                 MoveIsLegal = True
                 GameOver = True
@@ -437,7 +440,7 @@ def play_game(SampleGame):
                 print()
                 print("Black surrenders, White wins!")
                 print()
-                PlayAgain == "N"
+                PlayAgain = "N"
                 confirm = "y"
                 MoveIsLegal = True
                 GameOver = True
@@ -450,7 +453,7 @@ def play_game(SampleGame):
           if FinishSquare == -1:
             option_menu()
             PlayAgain,option = option_choice(PlayAgain)
-            if PlayAgain == "n":
+            if PlayAgain == "N":
               confirm = "y"
               MoveIsLegal = True
               GameOver = True
@@ -478,41 +481,42 @@ def play_game(SampleGame):
               menu_selection = None
               
 
-          StartRank = StartSquare % 10
-          StartFile = StartSquare // 10
-          FinishRank = FinishSquare % 10
-          FinishFile = FinishSquare // 10
-          pdb.set_trace()
-          if PlayAgain == "Y":
-            MoveIsLegal = CheckMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseTurn)
-          if MoveIsLegal != True:
-            print("That is not a legal move - please try again")
+            StartRank = StartSquare % 10
+            StartFile = StartSquare // 10
+            FinishRank = FinishSquare % 10
+            FinishFile = FinishSquare // 10
+            
+            if PlayAgain == "Y":
+              MoveIsLegal = CheckMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseTurn)
+            if MoveIsLegal != True:
+              print("That is not a legal move - please try again")
 
-          if StartSquare != -1 and FinishSquare != -1 and MoveIsLegal != False: 
-            confirm = ConfirmMove(StartSquare,FinishSquare)
+            if StartSquare != -1 and FinishSquare != -1 and MoveIsLegal != False: 
+              confirm = ConfirmMove(StartSquare,FinishSquare)
 
-       
-        if option != "4":
-          GameOver = CheckIfGameWillBeWon(Board, FinishRank, FinishFile)
-          MakeMove(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseTurn)
+         
+          if option != "4" and option != "2":
+            GameOver = CheckIfGameWillBeWon(Board, FinishRank, FinishFile)
+            MakeMove(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseTurn)
 
-      
+        
 
-          if GameOver:
-            DisplayWinner(WhoseTurn)
-            get_menu_selection()
-            menu_selection = 123
+            if GameOver:
+              DisplayWinner(WhoseTurn)
+              get_menu_selection()
+              menu_selection = 123
 
-          if WhoseTurn == "W":
-            WhoseTurn = "B"
-          else:
-            WhoseTurn = "W"
+            if WhoseTurn == "W":
+              WhoseTurn = "B"
+            else:
+              WhoseTurn = "W"
         
   return menu_selection
 
 if __name__ == "__main__":
   main_menu = True
+  scores =[None]
   while main_menu == True:
     display_menu()
     menu_selection = get_menu_selection()
-    main_menu = make_selection(menu_selection,main_menu)
+    main_menu = make_selection(menu_selection,main_menu,scores)
